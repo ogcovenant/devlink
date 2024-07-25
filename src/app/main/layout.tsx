@@ -13,11 +13,11 @@ export default function AppLayout({
   const [active, setActive] = useState("");
 
   useEffect(() => {
-    if (location === "/app/links") {
+    if (location === "/main/links" || location === "/main/links/") {
       setActive("links");
     }
 
-    if (location === "/app/profile") {
+    if (location === "/main/profile" || location === "/main/profile/") {
       setActive("profile");
     } 
   }, [location]);

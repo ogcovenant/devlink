@@ -12,7 +12,7 @@ const Header = ({ active }: { active: string }) => {
         <img src="/images/logo.png" alt="devlink logo" className="w-36" />
       </div>
       <div className="flex">
-        <Link href={"/app/links"}>
+        <Link href={"/main/links"}>
           {" "}
           <div
             className={`cursor-pointer p-3 px-5 flex items-center gap-2 ${
@@ -29,7 +29,7 @@ const Header = ({ active }: { active: string }) => {
             </p>
           </div>
         </Link>
-        <Link href={"/app/profile"}>
+        <Link href={"/main/profile"}>
           <div
             className={`cursor-pointer p-3 px-5 flex items-center gap-2 ${
               active === "profile" ? "bg-[#EFEBFF]" : "bg-none"
@@ -49,7 +49,7 @@ const Header = ({ active }: { active: string }) => {
         </Link>
       </div>
       <div>
-       <Link href={"/app/preview"}>
+       <Link href={"/main/preview"}>
        <button className="border-[1px] border-main p-2 px-5 rounded-md font-semibold text-main ">
           Preview
         </button>
