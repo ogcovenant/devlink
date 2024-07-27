@@ -3,12 +3,13 @@ import STATUS from "@/config/status";
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { ENVIRONMENTS } from "@/utils/constants";
-import * as jwt from 'jsonwebtoken'
+import jwt from 'jsonwebtoken';
 
 export async function POST(req: NextRequest) {
-  const { email, password } = await req.json();
-
   try {
+    const { email, password } = await req.json();
+
+    // Check if the user already exists
     const existingUser = await db.user.findUnique({
       where: {
         email: email,
@@ -21,18 +22,11 @@ export async function POST(req: NextRequest) {
         { status: STATUS.conflict }
       );
     }
-  } catch (err) {
-    if (err) {
-      return NextResponse.json(
-        { msg: "an unxpected error occured \n", err },
-        { status: STATUS.serverError }
-      );
-    }
-  }
 
-  const hashedPassword = await bcrypt.hash(password, ENVIRONMENTS.HASHSALT);
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, ENVIRONMENTS.HASHSALT);
 
-  try {
+    // Create the user in the database
     const user = await db.user.create({
       data: {
         email: email,
@@ -40,30 +34,40 @@ export async function POST(req: NextRequest) {
       },
     });
 
+    // Prepare the JWT payload
     const jwtPayload = {
-      id: user.id
-    }
+      id: user.id,
+    };
 
-    const token = jwt.sign(jwtPayload, ENVIRONMENTS.JWTSECRET as string)
+    // Sign the JWT
+    const token = jwt.sign(jwtPayload, ENVIRONMENTS.JWT_SECRET as string);
+    console.log(ENVIRONMENTS.HASHSALT)
+    console.log(ENVIRONMENTS.JWT_SECRET)
 
-    const response =  NextResponse.json(
+    // Prepare the response
+    const response = NextResponse.json(
       { msg: "User created successfully" },
       { status: STATUS.created }
     );
 
+    // Set the cookie with the token
     response.cookies.set("s:id", token, {
-      expires: new Date().setDate(30),
-      secure: true,
       httpOnly: true,
-      sameSite:"strict"
-    })
+      secure: true,
+      sameSite: 'strict', // Use 'strict' for security
+      expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
+    });
+
+    return response;
 
   } catch (err) {
-    if (err) {
-      return NextResponse.json(
-        { msg: "an unxpected error occured \n", err },
-        { status: STATUS.serverError }
-      );
-    }
+    console.error(err);
+    console.log(ENVIRONMENTS.HASHSALT)
+    console.log(ENVIRONMENTS.JWT_SECRET)
+    return NextResponse.json(
+      { msg: "An unexpected error occurred", err },
+      { status: STATUS.serverError }
+    );
+    
   }
 }

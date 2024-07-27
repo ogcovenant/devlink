@@ -1,4 +1,4 @@
 export const ENVIRONMENTS = {
-  HASHSALT : Number(process.env.NEXT_PUBLIC_HASHSALT),
-  JWTSECRET : process.env.NEXT_PUBLIC_JWTSECRET,
+  HASHSALT : Number(process.env.HASHSALT),
+  JWT_SECRET : process.env.JWT_SECRET,
 }
