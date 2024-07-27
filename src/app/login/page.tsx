@@ -31,13 +31,13 @@ const page = () => {
   });
 
   return (
-    <div className="w-full h-screen flex flex-col justify-center items-center">
-      <div className="w-[40%]">
-        <div className="flex justify-center">
+    <div className="w-full h-screen flex flex-col md:justify-center items-center p-6">
+      <div className="w-full md:w-[60%] lg:w-[50%] mt-8 md:mt-0">
+        <div className="flex justify-start md:justify-center">
           <img src="/images/logo.png" alt="Devlink logo" />
         </div>
         <div className="mt-10">
-          <h1 className="font-bold text-3xl text-[#333333]">Login</h1>
+          <h1 className="font-bold text-2xl md:text-3xl text-[#333333]">Login</h1>
           <p className="text-[#737373]">
             Add your details below to get back into the app
           </p>
