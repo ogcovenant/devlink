@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
     }
 
     const jwtPayload = {
-      id: user.password
+      id: user.id
     }
 
     const token = jwt.sign(jwtPayload, ENVIRONMENTS.JWT_SECRET as string);

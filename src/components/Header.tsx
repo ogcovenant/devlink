@@ -1,15 +1,16 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { FaLink } from "react-icons/fa";
+import { FaLink, FaEye } from "react-icons/fa";
 import { CgProfile } from "react-icons/cg";
 import Link from "next/link";
 
 const Header = ({ active }: { active: string }) => {
   return (
-    <div className="p-5 flex justify-between items-center">
+    <main className="p-5 flex justify-between items-center">
       <div>
-        <img src="/images/logo.png" alt="devlink logo" className="w-36" />
+        <img src="/images/logo.png" alt="devlink logo" className="w-32 hidden md:block" />
+        <img src="/images/logo-small.png" alt="devlink logo" className="md:hidden" />
       </div>
       <div className="flex">
         <Link href={"/main/links"}>
@@ -23,7 +24,7 @@ const Header = ({ active }: { active: string }) => {
             <p
               className={`font-semibold ${
                 active === "links" ? "text-main" : "text-[#737373]"
-              } `}
+              } hidden md:block`}
             >
               Links
             </p>
@@ -41,7 +42,7 @@ const Header = ({ active }: { active: string }) => {
             <p
               className={`font-semibold ${
                 active === "profile" ? "text-main" : "text-[#737373]"
-              } `}
+              } hidden md:block`}
             >
               Profile Details
             </p>
@@ -49,13 +50,16 @@ const Header = ({ active }: { active: string }) => {
         </Link>
       </div>
       <div>
-       <Link href={"/main/preview"}>
-       <button className="border-[1px] border-main p-2 px-5 rounded-md font-semibold text-main ">
-          Preview
-        </button>
-       </Link>
+        <Link href={"/main/preview"}>
+          <button className="border-[1px] border-main p-2 px-5 rounded-md font-semibold text-main ">
+            <span className="md:hidden">
+              <FaEye />
+            </span>
+            <span className="hidden md:block">Preview</span>
+          </button>
+        </Link>
       </div>
-    </div>
+    </main>
   );
 };
 
