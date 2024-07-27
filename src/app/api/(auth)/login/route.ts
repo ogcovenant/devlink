@@ -1,45 +1,45 @@
-import db from "@/config/dbconfig";
-import STATUS from "@/config/status";
 import { NextRequest, NextResponse } from "next/server";
+import STATUS from "@/config/status";
+import db from "@/config/dbconfig";
 import bcrypt from "bcryptjs";
-import { ENVIRONMENTS } from "@/utils/constants";
 import jwt from "jsonwebtoken";
+import { ENVIRONMENTS } from "@/utils/constants";
 
 export async function POST(req: NextRequest) {
-  try {
-    const { email, password } = await req.json();
+  const { email, password } = await req.json();
 
-    const existingUser = await db.user.findUnique({
+  try {
+    const user = await db.user.findUnique({
       where: {
         email: email,
       },
     });
 
-    if (existingUser) {
+    if (!user?.id) {
       return NextResponse.json(
-        { msg: "User with email already exists" },
-        { status: STATUS.conflict }
+        { msg: "User with email not found" },
+        { status: STATUS.notFound }
       );
     }
 
-    const hashedPassword = await bcrypt.hash(password, ENVIRONMENTS.HASHSALT);
+    const passwordMatch = await bcrypt.compare(password, user.password);
 
-    const user = await db.user.create({
-      data: {
-        email: email,
-        password: hashedPassword,
-      },
-    });
+    if (!passwordMatch) {
+      return NextResponse.json(
+        { msg: "Incorrect password" },
+        { status: STATUS.unauthorized }
+      );
+    }
 
     const jwtPayload = {
-      id: user.id,
-    };
+      id: user.password
+    }
 
     const token = jwt.sign(jwtPayload, ENVIRONMENTS.JWT_SECRET as string);
 
     const response = NextResponse.json(
-      { msg: "User created successfully" },
-      { status: STATUS.created }
+      { msg: "User logged in successfully" },
+      { status: STATUS.ok }
     );
 
     response.cookies.set("s:id", token, {
@@ -49,7 +49,8 @@ export async function POST(req: NextRequest) {
       expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
     });
 
-    return response;
+    return response
+
   } catch (err) {
     console.error(err);
     return NextResponse.json(
