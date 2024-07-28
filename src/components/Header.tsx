@@ -7,7 +7,7 @@ import Link from "next/link";
 
 const Header = ({ active }: { active: string }) => {
   return (
-    <main className="p-5 flex justify-between items-center">
+    <main className="p-5 flex justify-between items-center fixed top-0 w-full bg-white">
       <div>
         <img src="/images/logo.png" alt="devlink logo" className="w-32 hidden md:block" />
         <img src="/images/logo-small.png" alt="devlink logo" className="md:hidden" />

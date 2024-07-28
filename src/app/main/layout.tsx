@@ -38,12 +38,12 @@ export default function AppLayout({
   }, [location]);
 
   return (
-    <html lang="en" className="overflow-hidden">
-      <body className="h-screen !overflow-hidden">
+    <html lang="en" className="">
+      <body className="h-screen">
         {!screenLoading ? (
           <>
             <Header active={active} />
-            <div>{children}</div>
+            <div className="mt-16">{children}</div>
           </>
         ) : (
           <>
